@@ -1,28 +1,50 @@
 ﻿#include <afxwin.h>
-//CWinApp app;  // 반드시 주석 처리할 것!!!!!!
 
 class MyApp : public CWinApp {
 public:
-	virtual BOOL InitInstance();
+    virtual BOOL InitInstance();
 };
 
 class CMainWnd : public CFrameWnd {
+private:
+    CPoint m_ptClick = CPoint(-100, -100);
+
 public:
-	CMainWnd();
+    CMainWnd();
+
+    DECLARE_MESSAGE_MAP()
+
+    afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+    afx_msg void OnPaint();
 };
 
 BOOL MyApp::InitInstance() {
-	//AfxMessageBox(L"파생 클래스의 InitInstance() 재정의");
+    m_pMainWnd = new CMainWnd();
+    m_pMainWnd->ShowWindow(m_nCmdShow);
+    m_pMainWnd->UpdateWindow();
 
-	m_pMainWnd = new CMainWnd();
-	m_pMainWnd->ShowWindow(m_nCmdShow);
-	m_pMainWnd->UpdateWindow();
-
-	return TRUE;
+    return TRUE;
 }
 
+BEGIN_MESSAGE_MAP(CMainWnd, CFrameWnd)
+    ON_WM_LBUTTONDOWN()
+    ON_WM_PAINT()
+END_MESSAGE_MAP()
+
 CMainWnd::CMainWnd() {
-	Create(NULL, L"GUI 프로그래밍");
+    Create(NULL, L"GUI 프로그래밍 - 원 그리기");
+}
+
+void CMainWnd::OnLButtonDown(UINT nFlags, CPoint point) {
+    m_ptClick = point;
+    Invalidate();
+}
+
+void CMainWnd::OnPaint() {
+    CPaintDC dc(this);
+
+    dc.Ellipse(m_ptClick.x - 30, m_ptClick.y - 30,
+        m_ptClick.x + 30, m_ptClick.y + 30);
 }
 
 MyApp app;
