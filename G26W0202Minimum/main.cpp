@@ -6,10 +6,23 @@ public:
 	virtual BOOL InitInstance();
 };
 
+class CMainWnd : public CFrameWnd {
+public:
+	CMainWnd();
+};
+
 BOOL MyApp::InitInstance() {
-	AfxMessageBox(L"파생 클래스의 InitInstance() 재정의");
+	//AfxMessageBox(L"파생 클래스의 InitInstance() 재정의");
+
+	m_pMainWnd = new CMainWnd();
+	m_pMainWnd->ShowWindow(m_nCmdShow);
+	m_pMainWnd->UpdateWindow();
 
 	return TRUE;
+}
+
+CMainWnd::CMainWnd() {
+	Create(NULL, L"GUI 프로그래밍");
 }
 
 MyApp app;
